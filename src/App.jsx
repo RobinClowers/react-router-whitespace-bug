@@ -1,34 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Link, useParams, BrowserRouter, Routes, Route } from 'react-router-dom'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function FooRoutes() {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Foos</h1>
+      <Routes>
+        <Route path="foo/:name/*" element={<FooDetail />} />
+      </Routes>
     </>
+  )
+}
+
+function FooDetail() {
+  return (
+    <>
+      <h2>Foo details</h2>
+      <Routes>
+        <Route path="" element={<Name />} />
+      </Routes>
+    </>
+  )
+}
+
+function Name() {
+  const { name } = useParams()
+  console.log('name', name)
+  return <p>name: &quot;{name}&quot;</p>
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Link to="/">Home</Link>
+        <Link to="/foos/foo/bar">Working path</Link>
+        <Link to="/foos/foo/%20">Broken path</Link>
+        <Link to="/foos/foo/%0A">Broken path with newline</Link>
+      </div>
+      <Routes>
+        <Route path="/foos/*" element={<FooRoutes />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
